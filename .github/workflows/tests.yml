@@ -1,0 +1,31 @@
+name: Formula
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  formula:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - id: present
+        shell: bash
+        run: |
+          code=$(curl -fsS -o /dev/null -w '%{http_code}' \
+            "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/Formula/koinon.rb" || true)
+          if [ "$code" = 200 ]; then echo "formula=true" >> "$GITHUB_OUTPUT"; else echo "No formula yet."; fi
+      - if: steps.present.outputs.formula == 'true'
+        uses: Homebrew/actions/setup-homebrew@master
+      - if: steps.present.outputs.formula == 'true'
+        run: |
+          brew install --formula rwcii/koinon/koinon
+          brew test rwcii/koinon/koinon
+          brew audit --strict --online rwcii/koinon/koinon
+          koinon version
