@@ -15,14 +15,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     steps:
+      - uses: actions/checkout@v4
       - id: present
         shell: bash
         run: |
-          code=$(curl -fsS -o /dev/null -w '%{http_code}' \
-            "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_SHA}/Formula/koinon.rb" || true)
-          if [ "$code" = 200 ]; then echo "formula=true" >> "$GITHUB_OUTPUT"; else echo "No formula yet."; fi
+          if [ -f Formula/koinon.rb ]; then echo "formula=true" >> "$GITHUB_OUTPUT"; else echo "No formula yet."; fi
       - if: steps.present.outputs.formula == 'true'
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
       - if: steps.present.outputs.formula == 'true'
         run: |
           brew install --formula rwcii/koinon/koinon
