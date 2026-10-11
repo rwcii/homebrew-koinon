@@ -1,7 +1,6 @@
 class Koinon < Formula
   desc "Shared coordination and memory for local agent sessions"
   homepage "https://github.com/rwcii/koinon"
-  version "0.1.0"
   license "MIT"
 
   on_macos do
