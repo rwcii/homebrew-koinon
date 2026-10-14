@@ -5,23 +5,23 @@ class Koinon < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-darwin-arm64"
-      sha256 "3ad58956c58bf37743b3c534891d81ce839fd67a5fb2d9bac018eab302d3fab0"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.1/koinon-darwin-arm64"
+      sha256 "0dd9945819b951013de4a926af5d8c6c2ebf62d25488442ad23ce93f69e7471c"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-darwin-amd64"
-      sha256 "5c9c622e2d030e3cc145b53d3d07735cb5a785f080627a851fcbfa736d05b4fe"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.1/koinon-darwin-amd64"
+      sha256 "04cc2dc6a0797fc3863ddf314049039a329b61f6cc0d5382a8df05cd3e6e64d9"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-linux-arm64"
-      sha256 "32290236cc06d6772bbc16b608fe366620a3c6368bf604d9fed0c812d389a60d"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.1/koinon-linux-arm64"
+      sha256 "5711f97c5120766ccc50bc60d6b5fb8f2f293a7741cb6af8f6f3e39d17afea76"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-linux-amd64"
-      sha256 "3d082f17d1d72238cf33b90002c4f5629af6fbee338a28377f1cea27450f13a7"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.1/koinon-linux-amd64"
+      sha256 "9d66431288e8c7d1acc70bbd03b0cf5f562ebb52ed5b4efd0a627529d40be554"
     end
   end
 
@@ -31,10 +31,11 @@ class Koinon < Formula
 
   def caveats
     <<~EOS
-      Install the daemon and set up your agents:
-        koinon install --agent claude --agent codex
-      After each brew upgrade, run koinon install again. It copies the new binary
-      into its own prefix and restarts the daemon.
+      Install the daemon and set up your agents with this formula's binary:
+        #{opt_bin}/koinon install --agent claude --agent codex
+      After each brew upgrade, run #{opt_bin}/koinon install again. It copies the
+      new binary into its own prefix and restarts the daemon. A bare koinon install
+      can run the copy already installed in ~/.local/bin, which changes nothing.
     EOS
   end
 
