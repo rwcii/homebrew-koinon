@@ -5,23 +5,23 @@ class Koinon < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.1.0/koinon-darwin-arm64"
-      sha256 "67d0fa84aa4cbfa8a6d25a3758ef5a0f7247d33b03facead5b849f837faef728"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-darwin-arm64"
+      sha256 "3ad58956c58bf37743b3c534891d81ce839fd67a5fb2d9bac018eab302d3fab0"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.1.0/koinon-darwin-amd64"
-      sha256 "bc3931ae36eeca6b3473e7b3d81e27b9ca6bbb80ac12fdaea4250a2216cdf107"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-darwin-amd64"
+      sha256 "5c9c622e2d030e3cc145b53d3d07735cb5a785f080627a851fcbfa736d05b4fe"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.1.0/koinon-linux-arm64"
-      sha256 "f96cc8ae60daf1306fce7bfcabbaee7f0b0985d677566c9c2f8c44d056e45d91"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-linux-arm64"
+      sha256 "32290236cc06d6772bbc16b608fe366620a3c6368bf604d9fed0c812d389a60d"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.1.0/koinon-linux-amd64"
-      sha256 "e9a8c57851a6bff8dcd3bc835a4855df3283afc442666cb305e6dd8b5f9fbe23"
+      url "https://github.com/rwcii/koinon/releases/download/v0.2.0/koinon-linux-amd64"
+      sha256 "3d082f17d1d72238cf33b90002c4f5629af6fbee338a28377f1cea27450f13a7"
     end
   end
 
