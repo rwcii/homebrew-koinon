@@ -4,32 +4,32 @@ class Koinon < Formula
   license "MIT"
 
   bottle do
-    root_url "https://github.com/rwcii/koinon/releases/download/v0.4.2"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "5831e7546bbbca0382c69b6942911abfa4b49a69a4c88d3138df414a645c8da2"
-    sha256 cellar: :any_skip_relocation, monterey: "e0488ac83366fb0f5e0e2e31e55d300961ae8dc1afd347786403ba9085ccb71d"
-    sha256 cellar: :any_skip_relocation, arm64_linux: "980d7f3183620a947c916021ac503e5dc1bd40dd2eb30a781c3d3554ea7ee840"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "6bacb24f6013fcf667c09f5f719dcc0a543eef5de2cff63eb199203c0ef3518f"
+    root_url "https://github.com/rwcii/koinon/releases/download/v0.4.3"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "b1925b1309c17d60e8b7e8b71d14e29a34f6a01474e068d3dd43ea769bf41a24"
+    sha256 cellar: :any_skip_relocation, monterey: "e4601ce088082bd7e9bd5bcd7cb56e35cbcf95cb858fe5e61cb2dfd2e0acf936"
+    sha256 cellar: :any_skip_relocation, arm64_linux: "aaace77562e83ddf9d9164999910dd32f51e2cfb160a1845fbc6745f32f215c2"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "8f85f2e8b5b6d9a3c66360059b1ce6f07530f612597edfe44a8ff1e5fc29b26d"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.2/koinon-darwin-arm64"
-      sha256 "7828548f44f250adf49b1e56f328738a06e7df00f59dc8fc7f7fa9dc87e95eca"
+      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-darwin-arm64"
+      sha256 "710d0ef16e76fdb387830be92d45e18906932b174f5af5ac32e3e6ba51e39ed5"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.2/koinon-darwin-amd64"
-      sha256 "3450e7f2d44586325e9d629412fe66f17f6da84a094a51ae6bfc80ce6f7a7038"
+      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-darwin-amd64"
+      sha256 "668a1a6aafc41d15b4acad48bd6498343a308d6419cf9f7ddb04a59fb0b3ea55"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.2/koinon-linux-arm64"
-      sha256 "83a1d3cdefa30262b4e4baae4fac79bd8e200f79f2c8f63c9ab33576700b6def"
+      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-linux-arm64"
+      sha256 "ad46593617a0f35a6cef651fe4317a6eb7751d8d82acb5e89a503acd2004f980"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.2/koinon-linux-amd64"
-      sha256 "5d1e4640cf95bf6520b9b2a8a9ff5ed30bfe1d494bd535dced266ee334464f32"
+      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-linux-amd64"
+      sha256 "36e3ffa9cb817beb8e6f83e10b16aa84477cca9d73993261928186baa8d26348"
     end
   end
 
