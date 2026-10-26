@@ -4,32 +4,32 @@ class Koinon < Formula
   license "MIT"
 
   bottle do
-    root_url "https://github.com/rwcii/koinon/releases/download/v0.4.3"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "b1925b1309c17d60e8b7e8b71d14e29a34f6a01474e068d3dd43ea769bf41a24"
-    sha256 cellar: :any_skip_relocation, monterey: "e4601ce088082bd7e9bd5bcd7cb56e35cbcf95cb858fe5e61cb2dfd2e0acf936"
-    sha256 cellar: :any_skip_relocation, arm64_linux: "aaace77562e83ddf9d9164999910dd32f51e2cfb160a1845fbc6745f32f215c2"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "8f85f2e8b5b6d9a3c66360059b1ce6f07530f612597edfe44a8ff1e5fc29b26d"
+    root_url "https://github.com/rwcii/koinon/releases/download/v0.5.0"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "303be2c2495b40cfb8473a881c5e46958dd9f65d71aa7c3e0bdfa6ec414282e3"
+    sha256 cellar: :any_skip_relocation, monterey: "0c5cff581c65699a007dce2632d5353ffbe294a1d40bce988cbec66b9fbd8911"
+    sha256 cellar: :any_skip_relocation, arm64_linux: "6d1cb34c5d47655e694ef813393e8fff8f47c1121402c6e951123a6cf5e5f3c6"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "d24aa65092416d6c43e3128716f315cf1575cb267b4f1dbaa57df73549953f7d"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-darwin-arm64"
-      sha256 "710d0ef16e76fdb387830be92d45e18906932b174f5af5ac32e3e6ba51e39ed5"
+      url "https://github.com/rwcii/koinon/releases/download/v0.5.0/koinon-darwin-arm64"
+      sha256 "a8469adceccddf3cb4326f81e17589664163e06efe71b8867e2b6cb7539c72e0"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-darwin-amd64"
-      sha256 "668a1a6aafc41d15b4acad48bd6498343a308d6419cf9f7ddb04a59fb0b3ea55"
+      url "https://github.com/rwcii/koinon/releases/download/v0.5.0/koinon-darwin-amd64"
+      sha256 "30c503d2d1a90c9da980c0e30a5b9e5577f864cdf333dfe89ed071a09b4d072c"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-linux-arm64"
-      sha256 "ad46593617a0f35a6cef651fe4317a6eb7751d8d82acb5e89a503acd2004f980"
+      url "https://github.com/rwcii/koinon/releases/download/v0.5.0/koinon-linux-arm64"
+      sha256 "9af34638e9b8230cf2d9bd33d358628650fab979200d3af47cf50d1a5dcbb09c"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.4.3/koinon-linux-amd64"
-      sha256 "36e3ffa9cb817beb8e6f83e10b16aa84477cca9d73993261928186baa8d26348"
+      url "https://github.com/rwcii/koinon/releases/download/v0.5.0/koinon-linux-amd64"
+      sha256 "5735be56d949c6280cc4c8a19968be19743e0b10ff554b4d3950c21213af91de"
     end
   end
 
@@ -37,16 +37,31 @@ class Koinon < Formula
     bin.install Dir["koinon-*"].first => "koinon"
   end
 
+  # Each command has its own line: the expanded opt_bin path would break a wrapped sentence.
   def caveats
-    <<~EOS
+    text = <<~EOS
       Install the daemon and set up your agents with this formula's binary:
         #{opt_bin}/koinon install --agent claude --agent codex
-      The install links its binary to #{opt_bin}/koinon. To upgrade, run brew update,
-      then brew upgrade koinon: the daemon restarts on the new version. An installation
-      made by v0.3.0 or earlier has a copy instead; after this upgrade, run
-      #{opt_bin}/koinon install once. A macOS --system install keeps a copy; upgrade
-      it with #{opt_bin}/koinon install --system.
+
+      To upgrade:
+        brew update
+        brew upgrade koinon
+        koinon version
+      The install links its binary to the formula's opt path, so the daemon restarts
+      on the newly linked binary. The restart ends the dashboard login; for a new link:
+        koinon dashboard
+
+      An installation made by v0.3.0 or earlier has a copy. After this upgrade, run once:
+        #{opt_bin}/koinon install
     EOS
+    if OS.mac?
+      text += <<~EOS
+
+        A --system install keeps a copy. Upgrade it after each brew upgrade with:
+          #{opt_bin}/koinon install --system
+      EOS
+    end
+    text
   end
 
   test do
