@@ -4,32 +4,32 @@ class Koinon < Formula
   license "MIT"
 
   bottle do
-    root_url "https://github.com/rwcii/koinon/releases/download/v0.7.0"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "bc175cfcb541fac8ec86b9dfdb775d8da524ff4e8541eb9289bff0539bf8af23"
-    sha256 cellar: :any_skip_relocation, monterey: "3c3acd3337e9127313ba98f8ead183b9763465eea637187433f5ee8d6e6344dc"
-    sha256 cellar: :any_skip_relocation, arm64_linux: "5200e9f22193fd87bd9eb95d300bf8246143796def2486dc64a7b3cd87f8837d"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "c37a0b474220573b7fc5524325b5647b39f5aafd6d84edf15fdc0d082f1ccc3c"
+    root_url "https://github.com/rwcii/koinon/releases/download/v0.8.0"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "5f6c034cfb5d4c3ea717500fbc7051df5d637a19acecf272747c81b234b4d5a6"
+    sha256 cellar: :any_skip_relocation, monterey: "7a50baa926fcdbb499e4e221eab21d3e8367b3b20e3bb5f3dd71ab289fd12f54"
+    sha256 cellar: :any_skip_relocation, arm64_linux: "af14e10c599f28031e561a18278236624a3a9aa02ab2c99f995085e1405c6b60"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "bfb976f1cb2b01191adf0d0caa2e01d5a46c6735462329892af64449dd8538b4"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.7.0/koinon-darwin-arm64"
-      sha256 "625c93317ebcaca47ff451607fba0b6272b5918255bb64ff83b1791984bc8502"
+      url "https://github.com/rwcii/koinon/releases/download/v0.8.0/koinon-darwin-arm64"
+      sha256 "47a5301d3a0fbb8508166b89f5e105b5ac2e4827eaa7f5bbb805cd695662afe3"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.7.0/koinon-darwin-amd64"
-      sha256 "0b6dfe2c820c58e7a3e3f9b7553f74bbdce517c8311cd81f6f35991552408aa2"
+      url "https://github.com/rwcii/koinon/releases/download/v0.8.0/koinon-darwin-amd64"
+      sha256 "79d7e58fd0699773dd05d548a5bf058e65f414fb06ff971a65b3593d8265d3a8"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.7.0/koinon-linux-arm64"
-      sha256 "fee4fba7049020c897bb1c8f40c425ea8c9fff2d07e32bb2ad0443d3cc1a6e75"
+      url "https://github.com/rwcii/koinon/releases/download/v0.8.0/koinon-linux-arm64"
+      sha256 "74c5897782a6fcd90a01505102866365b6c430eac94c6f9a8d20c33484cd8611"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.7.0/koinon-linux-amd64"
-      sha256 "3dcdfb13367da47c792922f33536cf79c095834dcdc508cfd7675cd35b31da75"
+      url "https://github.com/rwcii/koinon/releases/download/v0.8.0/koinon-linux-amd64"
+      sha256 "fd7f413982c2f554cbd90600cd60c15f990fb66fe29091c478fee3dd704c14ed"
     end
   end
 
@@ -40,7 +40,8 @@ class Koinon < Formula
   # Each command has its own line: the expanded opt_bin path would break a wrapped sentence.
   # koinon install --plan reads this machine and prints only the steps that it still needs;
   # it changes nothing (#551). Homebrew keeps the person's PATH, where the agents' CLIs are,
-  # in HOMEBREW_PATH. When the plan cannot run or check everything, the fixed steps show.
+  # in HOMEBREW_PATH. When the plan cannot run or check everything, the fixed steps show. A
+  # current installation has no steps, so it shows the plan's sentence alone (#561).
   def caveats
     plan = begin
       require "open3"
@@ -50,7 +51,11 @@ class Koinon < Formula
     rescue StandardError
       nil
     end
-    text = if plan
+    current = "The Koinon installation is current."
+    done = plan&.strip == current
+    text = if done
+      "#{current}\n"
+    elsif plan
       "The steps that this installation needs:\n#{plan.lines.map { |line| "  #{line}" }.join}"
     else
       fixed = <<~EOS
@@ -73,9 +78,13 @@ class Koinon < Formula
       end
       fixed
     end
+    unless done
+      text += <<~EOS
+        Check again after these steps:
+          #{opt_bin}/koinon install --plan
+      EOS
+    end
     text + <<~EOS
-      Check again after these steps:
-        #{opt_bin}/koinon install --plan
 
       To upgrade:
         brew update
