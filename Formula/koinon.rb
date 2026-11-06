@@ -4,32 +4,32 @@ class Koinon < Formula
   license "MIT"
 
   bottle do
-    root_url "https://github.com/rwcii/koinon/releases/download/v0.9.2"
-    sha256 cellar: :any_skip_relocation, arm64_monterey: "becf9d26fa1654bca180687e6ea80be78b0382003ad793ad80e770b6d23621bc"
-    sha256 cellar: :any_skip_relocation, monterey: "7046ae919687b3a67364431842fbd80f2620781aa72d760bff5a6be914ed7775"
-    sha256 cellar: :any_skip_relocation, arm64_linux: "1ac0313f3b3f9d9b5a1fdfbf53b9599c6982d664ba5f178f9fa80522989d7e90"
-    sha256 cellar: :any_skip_relocation, x86_64_linux: "50ce8e8e0c7b8488e24fcc56621d6fe81320896436a2bb37a3c09a9cb0a51799"
+    root_url "https://github.com/rwcii/koinon/releases/download/v0.10.0"
+    sha256 cellar: :any_skip_relocation, arm64_monterey: "23f73589c0a9a1e8a7cb16538d65fe8fb0c8d8bae322387056789623617714f9"
+    sha256 cellar: :any_skip_relocation, monterey: "79524c889a089814c41550b81b580e2a445f422ff765761f991e49d24804b05e"
+    sha256 cellar: :any_skip_relocation, arm64_linux: "c6311da9eaea4a3402b0190c823311c9ee12532f6f72f6e9d43ad1ac1ce912bd"
+    sha256 cellar: :any_skip_relocation, x86_64_linux: "9a3029969f93c34479e6251ff4e72839a1652cf29f0f0df8373f2a648fe6a630"
   end
 
   on_macos do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.9.2/koinon-darwin-arm64"
-      sha256 "9af861553eb666631218de93d54e3e2ea9da636de3918a240dc0da5b6168c9b3"
+      url "https://github.com/rwcii/koinon/releases/download/v0.10.0/koinon-darwin-arm64"
+      sha256 "d92a6d806c5d914f4aebf936c5c4892474055bfd4006b030eebfe2890911f8fd"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.9.2/koinon-darwin-amd64"
-      sha256 "1a163ca19576e37f7571e4135191df61f4236f05f7dfd7c54b3dd853e75d36c8"
+      url "https://github.com/rwcii/koinon/releases/download/v0.10.0/koinon-darwin-amd64"
+      sha256 "79c6f9535acad1c13187242ddea2f406bb78ef738cfc89f65018481256b29c02"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/rwcii/koinon/releases/download/v0.9.2/koinon-linux-arm64"
-      sha256 "bd19c5fb78116afbccd8a3191385a545c075d7ca3c63d69c37650d94c66d1f13"
+      url "https://github.com/rwcii/koinon/releases/download/v0.10.0/koinon-linux-arm64"
+      sha256 "f788c4e97e3769cf7f3a36d34963d3c7479855bfe74e3b50c83cbf01b127cf0f"
     end
     on_intel do
-      url "https://github.com/rwcii/koinon/releases/download/v0.9.2/koinon-linux-amd64"
-      sha256 "8968271a43c5b847c916a38ced849e9b2e014e0cf38ea883928612eaae172efa"
+      url "https://github.com/rwcii/koinon/releases/download/v0.10.0/koinon-linux-amd64"
+      sha256 "6734e8f4679c980e3f842006611af0bc5bc8f5458e061a01764c156fefb65a86"
     end
   end
 
@@ -37,7 +37,8 @@ class Koinon < Formula
     bin.install Dir["koinon-*"].first => "koinon"
   end
 
-  # Each command has its own line: the expanded opt_bin path would break a wrapped sentence.
+  # The caveats say first what the person must do, in the action line, then each command on
+  # its own line: the expanded opt_bin path would break a wrapped sentence (PDR 003, Decision 6).
   # koinon install --plan reads this machine and prints only the steps that it still needs;
   # it changes nothing (#551). Homebrew keeps the person's PATH, where the agents' CLIs are,
   # in HOMEBREW_PATH. When the plan cannot run or check everything, the fixed steps show. A
@@ -51,19 +52,23 @@ class Koinon < Formula
     rescue StandardError
       nil
     end
+    action = "ACTION REQUIRED: to finish the Koinon installation, run these commands, in order:\n"
+    about = "koinon install starts the daemon; at a terminal it offers to set up each agent it finds.\n"
     current = "The Koinon installation is current."
     done = plan&.strip == current
     text = if done
-      "#{current}\n"
+      "#{current} No action is required.\n"
     elsif plan
-      "The steps that this installation needs:\n#{plan.lines.map { |line| "  #{line}" }.join}"
+      steps = action + plan.lines.map { |line| "  #{line}" }.join
+      steps += about if plan.lines.any? { |line| line.split[1] == "install" }
+      steps
     else
-      fixed = <<~EOS
-        Install the daemon; at a terminal it offers to set up each agent it finds:
-          #{opt_bin}/koinon install
-        Set the maintainer secret for the dashboard login:
-          #{opt_bin}/koinon maintainer secret set
-        Set up an agent family later with its command:
+      fixed = action + <<~EOS.gsub(/^/, "  ")
+        #{opt_bin}/koinon install
+        #{opt_bin}/koinon maintainer secret set
+      EOS
+      fixed += about + <<~EOS
+        To set up an agent family later, run its command:
           #{opt_bin}/koinon install --agent claude
           #{opt_bin}/koinon install --agent codex
           #{opt_bin}/koinon install --agent agy
@@ -80,13 +85,13 @@ class Koinon < Formula
     end
     unless done
       text += <<~EOS
-        Check again after these steps:
+        Then make sure that no step is left:
           #{opt_bin}/koinon install --plan
       EOS
     end
     text + <<~EOS
 
-      To upgrade:
+      To upgrade Koinon later:
         brew update
         brew upgrade koinon
         koinon version
